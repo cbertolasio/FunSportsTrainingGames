@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  funsportstraininggames:
+    image: funsportstraininggames
+    build:
+      context: .
+      dockerfile: FunSportsTrainingGames\Dockerfile
