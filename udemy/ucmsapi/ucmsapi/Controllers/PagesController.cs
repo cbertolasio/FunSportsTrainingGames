@@ -35,11 +35,24 @@ namespace ucmsapi.Controllers
 			return Json(page);
 		}
 
+		// GET api/pages/edit/id
+		[HttpGet("edit/{id}")]
+		public IActionResult Edit(int id)
+		{
+			Page page = _context.Pages.SingleOrDefault(it => it.Id == id);
+			if (page == null)
+			{
+				return Json("PageNotFound");
+			}
+
+			return Json(page);
+		}
+
 
 
 		// POST api/pages/create
 		[HttpPost("create")]
-		public IActionResult Post([FromBody] Page page)
+		public IActionResult Create([FromBody] Page page)
 		{
 			page.Slug = page.Title.Replace(" ", "-").ToLower();
 			page.HasSidebar = page.HasSidebar ?? "no";
@@ -58,10 +71,25 @@ namespace ucmsapi.Controllers
 			}
 		}
 
-		// PUT api/<controller>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody]string value)
+		// PUT api/pages/edit/id
+		[HttpPut("edit/{id}")]
+		public IActionResult Put(int id, [FromBody]Page page)
 		{
+			page.Slug = page.Title.Replace(" ", "-").ToLower();
+			page.HasSidebar = page.HasSidebar ?? "no";
+
+			var p = _context.Pages.FirstOrDefault(it => it.Id != id && it.Slug == page.Slug);
+			if (p != null)
+			{
+				return Json("pageExists");
+			}
+			else
+			{
+				_context.Update(page);
+				_context.SaveChanges();
+
+				return Json("ok");
+			}
 		}
 
 		// DELETE api/<controller>/5
