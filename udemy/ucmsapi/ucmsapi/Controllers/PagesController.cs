@@ -37,10 +37,25 @@ namespace ucmsapi.Controllers
 
 
 
-		// POST api/<controller>
-		[HttpPost]
-		public void Post([FromBody]string value)
+		// POST api/pages/create
+		[HttpPost("create")]
+		public IActionResult Post([FromBody] Page page)
 		{
+			page.Slug = page.Title.Replace(" ", "-").ToLower();
+			page.HasSidebar = page.HasSidebar ?? "no";
+
+			var slug = _context.Pages.FirstOrDefault(it => it.Slug == page.Slug);
+			if (slug != null)
+			{
+				return Json("pageExists");
+			}
+			else
+			{
+				_context.Pages.Add(page);
+				_context.SaveChanges();
+
+				return Json("ok");
+			}
 		}
 
 		// PUT api/<controller>/5
