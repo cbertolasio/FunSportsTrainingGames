@@ -38,7 +38,7 @@ export class AdminEditPageComponent implements OnInit {
 
   editPage({value, valid}) {
     if (valid) {
-      this.pageService.postEditPage(value).subscribe(res => {
+      this.pageService.putEditPage(value).subscribe(res => {
         if (res === 'pageExists') {
           this.errorMsg = true;
           setTimeout(function() {

@@ -1,22 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ActivatedRoute, Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { PageService } from './services/page.service';
-import { HttpClient } from 'selenium-webdriver/http';
-import { HttpClientModule } from '@angular/common/http';
 import { PagesComponent } from './components/pages/pages.component';
 import { AdminPagesComponent } from './components/admin-pages/admin-pages.component';
 import { AdminAddPageComponent } from './components/admin-add-page/admin-add-page.component';
 import { AdminEditPageComponent } from './components/admin-edit-page/admin-edit-page.component';
+import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.component';
+
+import { SidebarService } from './services/sidebar.service';
+import { PageService } from './services/page.service';
 
 const appRoutes: Routes = [
   {path: 'admin/pages', component: AdminPagesComponent},
   {path: 'admin/add-page', component: AdminAddPageComponent},
   {path: 'admin/edit-page/:id', component: AdminEditPageComponent},
+  {path: 'admin/sidebar', component: AdminSidebarComponent},
   {path: ':page', component: PagesComponent},
   {path: '', component: PagesComponent}
 ];
@@ -28,7 +31,8 @@ const appRoutes: Routes = [
     PagesComponent,
     AdminPagesComponent,
     AdminAddPageComponent,
-    AdminEditPageComponent
+    AdminEditPageComponent,
+    AdminSidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,7 @@ const appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [PageService],
+  providers: [PageService, SidebarService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

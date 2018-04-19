@@ -26,7 +26,7 @@ export class PageService {
     return this.http.post('http://localhost:32364/api/pages/create', value);
   }
 
-  postEditPage(value) {
+  putEditPage(value) {
     return this.http.put('http://localhost:32364/api/pages/edit/' + value.id, value);
   }
 }
