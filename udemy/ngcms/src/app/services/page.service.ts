@@ -13,11 +13,16 @@ export class PageService {
   getPages() {
     return this.http.get('http://localhost:32364/api/pages');
   }
+
   getPage(slug) {
     return this.http.get('http://localhost:32364/api/pages/' + slug);
   }
 
   postAddPage(value) {
     return this.http.post('http://localhost:32364/api/pages/create', value);
+  }
+
+  getEditPage(id) {
+    return this.http.get('http://localhost:32364/api/pages/edit/' + id);
   }
 }

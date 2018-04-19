@@ -18,10 +18,10 @@
       {{ page.title }}
     </td>
     <td>
-      <a href="Edit">Edit</a>
+      <a routerLink="/admin/edit-page/{{ page.id }}">Edit</a>
     </td>
-    <td>
-        <a href="Delete">Delete</a>
+    <td >
+        <a *ngIf="page.slug != 'home'" (click)="deletePage(page.id)" routerLink="/admin/pages">Delete</a>
       </td>
   </tr>
 </table>
