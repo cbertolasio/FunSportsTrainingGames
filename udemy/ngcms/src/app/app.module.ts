@@ -11,11 +11,18 @@ import { AdminPagesComponent } from './components/admin-pages/admin-pages.compon
 import { AdminAddPageComponent } from './components/admin-add-page/admin-add-page.component';
 import { AdminEditPageComponent } from './components/admin-edit-page/admin-edit-page.component';
 import { AdminSidebarComponent } from './components/admin-sidebar/admin-sidebar.component';
+import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
+import { RegisterComponent } from './components/register/register.component';
 
 import { SidebarService } from './services/sidebar.service';
 import { PageService } from './services/page.service';
+import { UserService } from './services/user.service';
 
 const appRoutes: Routes = [
+  {path: 'register', component: RegisterComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'logout', component: LogoutComponent},
   {path: 'admin/pages', component: AdminPagesComponent},
   {path: 'admin/add-page', component: AdminAddPageComponent},
   {path: 'admin/edit-page/:id', component: AdminEditPageComponent},
@@ -32,7 +39,10 @@ const appRoutes: Routes = [
     AdminPagesComponent,
     AdminAddPageComponent,
     AdminEditPageComponent,
-    AdminSidebarComponent
+    AdminSidebarComponent,
+    LoginComponent,
+    LogoutComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +50,7 @@ const appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [PageService, SidebarService],
+  providers: [PageService, SidebarService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
