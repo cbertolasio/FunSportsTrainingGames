@@ -10,6 +10,7 @@ import { PageService } from '../../services/page.service';
 })
 export class AdminEditPageComponent implements OnInit {
 
+  page: any;
   title: string;
   content: string;
   id: string;
@@ -27,6 +28,7 @@ export class AdminEditPageComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.param = params['id'];
       this.pageService.getEditPage(this.param).subscribe(page => {
+        this.page = page;
         this.title = page['title'];
         this.content = page['content'];
         this.id = page['id'];
@@ -34,4 +36,27 @@ export class AdminEditPageComponent implements OnInit {
     });
   }
 
+  editPage({value, valid}) {
+    if (valid) {
+      this.pageService.postEditPage(value).subscribe(res => {
+        if (res === 'pageExists') {
+          this.errorMsg = true;
+          setTimeout(function() {
+            this.errorMsg = false;
+          }.bind(this), 2000);
+        } else {
+          this.successMsg = true;
+          setTimeout(function() {
+            this.successMsg = false;
+          }.bind(this), 2000);
+
+          this.pageService.getPages().subscribe(pages => {
+            this.pageService.pagesBS.next(pages);
+          });
+        }
+      });
+    } else {
+      console.log('Form is not valid');
+    }
+  }
 }

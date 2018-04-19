@@ -18,11 +18,15 @@ export class PageService {
     return this.http.get('http://localhost:32364/api/pages/' + slug);
   }
 
+  getEditPage(id) {
+    return this.http.get('http://localhost:32364/api/pages/edit/' + id);
+  }
+
   postAddPage(value) {
     return this.http.post('http://localhost:32364/api/pages/create', value);
   }
 
-  getEditPage(id) {
-    return this.http.get('http://localhost:32364/api/pages/edit/' + id);
+  postEditPage(value) {
+    return this.http.put('http://localhost:32364/api/pages/edit/' + value.id, value);
   }
 }
