@@ -29,4 +29,8 @@ export class PageService {
   putEditPage(value) {
     return this.http.put('http://localhost:32364/api/pages/edit/' + value.id, value);
   }
+
+  deletePage(id) {
+    return this.http.delete('http://localhost:32364/api/pages/delete/' + id);
+  }
 }

@@ -92,10 +92,15 @@ namespace ucmsapi.Controllers
 			}
 		}
 
-		// DELETE api/<controller>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
+		// DELETE api/pages/id
+		[HttpDelete("delete/{id}")]
+		public IActionResult Delete(int id)
 		{
+			Page page = _context.Pages.SingleOrDefault(it => it.Id == id);
+			_context.Remove(page);
+			_context.SaveChanges();
+
+			return Json("ok");
 		}
 
 		public PagesController(UCmsApiContext context)
