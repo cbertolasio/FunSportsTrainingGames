@@ -9,7 +9,6 @@ import { UserService } from '../../services/user.service';
 })
 export class RegisterComponent implements OnInit {
 
-
   userExists = false;
 
   constructor(
@@ -20,4 +19,22 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
+  register({value, valid}) {
+    if (valid) {
+      value.isAdmin = 'no';
+      this.userService.register(value).subscribe(res => {
+        if (res === 'userExists') {
+          this.userExists = true;
+          setTimeout(function() {
+            this.userExists = false;
+          }.bind(this), 2000);
+        } else {
+          localStorage.setItem('userRegistered', 'true');
+          this.router.navigateByUrl('login');
+        }
+      });
+    } else {
+      console.log('Form is not valid');
+    }
+  }
 }

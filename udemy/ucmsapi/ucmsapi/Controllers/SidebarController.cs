@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ucmsapi.Data;
 using ucmsapi.Models;
@@ -11,7 +8,7 @@ namespace ucmsapi.Controllers
 {
 	[Route("api/[controller]")]
 	public class SidebarController : Controller
-    {
+	{
 		private readonly UCmsApiContext _context;
 		public SidebarController(UCmsApiContext context)
 		{
