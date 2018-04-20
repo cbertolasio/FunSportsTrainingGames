@@ -29,6 +29,21 @@ namespace ucmsapi.Controllers
 			}
 		}
 
+		// POST api/users/login
+		[HttpPost("login")]
+		public IActionResult Login([FromBody] User user)
+		{
+			var existingUser = _context.Users.FirstOrDefault(it => it.UserName == user.UserName  && it.Password == user.Password);
+			if (existingUser != null)
+			{
+				return Json(existingUser.UserName);
+			}
+			else
+			{
+				return Json("invalidLogin");
+			}
+		}
+
 		public UsersController(UCmsApiContext context)
 		{
 			_context = context;
