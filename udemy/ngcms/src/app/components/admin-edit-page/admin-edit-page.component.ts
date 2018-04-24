@@ -17,6 +17,7 @@ export class AdminEditPageComponent implements OnInit {
   successMsg = false;
   errorMsg = false;
   param: any;
+  sidebar = false;
 
   constructor(
     private router: Router,
@@ -32,6 +33,9 @@ export class AdminEditPageComponent implements OnInit {
         this.title = page['title'];
         this.content = page['content'];
         this.id = page['id'];
+        if (page['hasSidebar'] === 'true') {
+          this.sidebar = true;
+        }
       });
     });
   }

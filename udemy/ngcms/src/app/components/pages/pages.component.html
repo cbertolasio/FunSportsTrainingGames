@@ -1,6 +1,14 @@
-<div class="container-fluid">
-    <div class="row">
+<div class="row" *ngIf="hasSidebar">
+    <div class="col-xs-8">
         {{ pageBody }}
-      </div>
+    </div>
+    <div class="col-xs-4">
+        {{ sidebar }}
+    </div>
 </div>
 
+<div class="row" *ngIf="!hasSidebar">
+    <div class="col-xs-12">
+        {{ pageBody }}
+    </div>
+</div>

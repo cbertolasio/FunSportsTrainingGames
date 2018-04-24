@@ -14,7 +14,8 @@
 <form novalidate #f="ngForm" (ngSubmit)="editPage(f)">
   <div class="form-group">
     <label for="">Title</label>
-    <input type="text" class="form-control" placeholder="Title" name="title" [(ngModel)]="title" #pageTitle="ngModel" minlength="3" required>
+    <input type="text" class="form-control" placeholder="Title" name="title" [(ngModel)]="title" #pageTitle="ngModel" minlength="3"
+      required>
   </div>
   <div class="aler alert-danger" *ngIf="pageTitle.errors?.required && pageTitle.touched">
     Title is required
@@ -26,6 +27,11 @@
   <div class="form-group">
     <label for="">Content:</label>
     <textarea name="content" id="" cols="30" rows="10" class="form-control" placeholder="Content" [(ngModel)]="content"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="">Has Sidebar:</label>
+    <input type="checkbox" name="hasSidebar" [checked]="sidebar" [(ngModel)]="hasSidebar">
   </div>
 
   <input type="hidden" name="id" [(ngModel)]="id">

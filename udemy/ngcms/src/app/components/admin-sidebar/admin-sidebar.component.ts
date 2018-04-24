@@ -9,7 +9,7 @@ import { SidebarService } from '../../services/sidebar.service';
 })
 export class AdminSidebarComponent implements OnInit {
 
-  content: string;
+  contentName: string;
   id: string;
   successMsg = false;
 
@@ -20,7 +20,7 @@ export class AdminSidebarComponent implements OnInit {
 
   ngOnInit() {
     this.sidebarSesrvice.getSidebar().subscribe(res => {
-      this.content = res['contentName'];
+      this.contentName = res['contentName'];
       this.id = res['id'];
     });
   }

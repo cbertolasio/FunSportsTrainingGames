@@ -29,6 +29,11 @@
   </div>
 
   <div class="form-group">
+    <label for="">Has Sidebar:</label>
+    <input type="checkbox" name="hasSidebar" [(ngModel)]="hasSidebar">
+  </div>
+  
+  <div class="form-group">
     <button class="btn btn-default" [disabled]="!f.valid">Add page</button>
   </div>
 </form>
