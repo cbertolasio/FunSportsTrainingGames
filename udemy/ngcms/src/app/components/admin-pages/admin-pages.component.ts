@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageService } from '../../services/page.service';
+declare var CKEDITOR: any;
 
 @Component({
   selector: 'app-admin-pages',
@@ -19,6 +20,10 @@ export class AdminPagesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (localStorage.getItem('user') !== '\"admin\"') {
+      this.router.navigateByUrl('');
+    }
+
     this.pages = this.pageService.pagesBS;
   }
 

@@ -1,14 +1,14 @@
 <div class="row" *ngIf="hasSidebar">
     <div class="col-xs-8">
-        {{ pageBody }}
+        <div [innerHTML]="pageBody"></div>
     </div>
     <div class="col-xs-4">
-        {{ sidebar }}
+            <div [innerHTML]="sidebar"></div>
     </div>
 </div>
 
 <div class="row" *ngIf="!hasSidebar">
     <div class="col-xs-12">
-        {{ pageBody }}
+            <div [innerHTML]="pageBody"></div>
     </div>
 </div>

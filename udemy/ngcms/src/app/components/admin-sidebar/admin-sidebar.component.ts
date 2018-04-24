@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SidebarService } from '../../services/sidebar.service';
+declare var CKEDITOR: any;
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -19,13 +20,19 @@ export class AdminSidebarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (localStorage.getItem('user') !== '\"admin\"') {
+      this.router.navigateByUrl('');
+    }
+
     this.sidebarSesrvice.getSidebar().subscribe(res => {
       this.contentName = res['contentName'];
       this.id = res['id'];
+      CKEDITOR.replace('content');
     });
   }
 
   editSidebar({value}) {
+    value.contentName = CKEDITOR.instances.content.getData();
     this.sidebarSesrvice.putSidebar(value).subscribe(res => {
       this.successMsg = true;
       setTimeout(function() {
