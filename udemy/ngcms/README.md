@@ -1,3 +1,6 @@
+# About
+this project stems from a course over on udemy => https://www.udemy.com/asp-net-mvc-core-and-angular-5-project-creating-a-cms
+
 # Ngcms
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
