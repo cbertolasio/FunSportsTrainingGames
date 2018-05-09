@@ -1,0 +1,19 @@
+@import '~sass/colors';
+
+.custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.focused {
+    background-color: $trimble-gray-5;
+  }
+  .custom-day.range, .custom-day:hover {
+    background-color: $trimble-blue;
+    color: $white;
+  }
+  .custom-day.faded {
+    background-color: $trimble-blue-2;
+  }
