@@ -1,0 +1,29 @@
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark rounded my-navbar">
+    <a id="titleLink" href="#" class="navbar-brand" routerLink="/">{{title}}}</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <div ngbDropdown>
+            <button type="button" class="btn btn-link nav-link dropdown-toggle" id="reportDropDown" ngbDropdownToggle>Reports</button>
+            <div ngbDropdownMenu aria-labelledby="reportDropDown">
+              <button class="dropdown-item" routerLink="/reports/irrigationcoverage">Coverage Report</button>
+              <button class="dropdown-item">Other Report 1</button>
+              <button class="dropdown-item">Other Report 2</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+<div class="container mb-4">
+  <router-outlet class="mt-5"></router-outlet>
+</div>

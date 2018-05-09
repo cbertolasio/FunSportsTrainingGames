@@ -1,0 +1,71 @@
+<h4 class="display-4 my-4">Irrigation Events:</h4>
+<form [formGroup]="inputForm" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <label for="pivotIdInput">Pivot Id</label>
+      <input type="text" id="pivotIdInput" class="form-control" aria-describedby="pivotIdHelp" placeholder="Enter Pivot Id" formControlName="pivotId">
+      <small id="pivotIdHelp" class="form-text text-muted">Enter the identifier of the pivot you are searching for</small>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col col-md-6">
+      <label for="datePicker">Date Range</label>
+      <ngb-datepicker id="datePicker" #dp (select)="onDateSelection($event)" [displayMonths]="3" [dayTemplate]="t"></ngb-datepicker>
+
+      <ng-template #t let-date="date" let-focused="focused">
+        <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+          [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+          {{date.day}}
+        </span>
+      </ng-template>
+    </div>
+    <!-- <div class="col">
+      <pre>From: {{model.startDate | json}} </pre>
+      <pre>To: {{model.stopDate | json }} </pre>
+    </div> -->
+
+  </div>
+  <div class="row">
+    <div class="form-group col col-md-3">
+      <label for="startTime">Start Time</label>
+      <ngb-timepicker id="startTime" formControlName="startTime"></ngb-timepicker>
+      <!-- <hr>
+      <pre>Selected Time: {{model.startTime | json}}</pre> -->
+    </div>
+    <div class="form-group col col-md-3">
+      <label for="stopTime">Stop Time</label>
+      <ngb-timepicker id="stopTime" formControlName="stopTime"></ngb-timepicker>
+      <!-- <hr>
+      <pre>Selected Time: {{model.stopTime | json}}</pre> -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary btn-block">Search</button>
+    </div>
+  </div>
+</form>
+<br>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">JournalId</th>
+        <th scope="col">Bearing</th>
+        <th scope="col">Pump</th>
+        <th scope="col">Direction</th>
+        <th scope="col">Substance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of irrigationEvents" [class.selected]="item === selectedEvent" (click)="onSelect(item)">
+        <th scope="row">{{item.journalId}}</th>
+        <td>{{item.bearing}}</td>
+        <td>{{item.pump}}</td>
+        <td>{{item.rotation}}</td>
+        <td>{{item.substance}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
