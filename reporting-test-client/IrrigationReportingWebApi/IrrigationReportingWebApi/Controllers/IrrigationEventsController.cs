@@ -80,18 +80,18 @@ namespace Trimble.Ag.IrrigationReporting.WebApi.Controllers
 		{
 			return new BC.TimeData
 			{
-				Hours = request.StartAt.Hours,
-				Minutes = request.StartAt.Minutes,
-				Seconds = request.StartAt.Seconds
+				Hours = request.StartAt.Hour,
+				Minutes = request.StartAt.Minute,
+				Seconds = request.StartAt.Second
 			};
 		}
 		private BC.TimeData GetStopTime(IrrigationEventRequest request)
 		{
 			return new BC.TimeData
 			{
-				Hours = request.StopAt.Hours,
-				Minutes = request.StopAt.Minutes,
-				Seconds = request.StopAt.Seconds
+				Hours = request.StopAt.Hour,
+				Minutes = request.StopAt.Minute,
+				Seconds = request.StopAt.Second
 			};
 		}
 

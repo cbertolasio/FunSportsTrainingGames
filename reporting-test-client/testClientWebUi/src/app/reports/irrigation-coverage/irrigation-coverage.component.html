@@ -18,12 +18,11 @@
           {{date.day}}
         </span>
       </ng-template>
+      <!-- <div class="justify-content-end">
+        <pre class="">From: {{inputForm.value.startDate | json}} </pre>
+        <pre class="">To: {{inputForm.value.stopDate | json }} </pre>
+      </div> -->
     </div>
-    <!-- <div class="col">
-      <pre>From: {{model.startDate | json}} </pre>
-      <pre>To: {{model.stopDate | json }} </pre>
-    </div> -->
-
   </div>
   <div class="row">
     <div class="form-group col col-md-3">
@@ -41,31 +40,63 @@
   </div>
 
   <div class="row">
+    <div class="form-group col col-md-2">
+      <label for="startBearing">Start Bearing</label>
+      <input id="startBearing" class="form-control" type="number" formControlName="startBearing" min="1" max="360">
+    </div>
+    <div class="form-group col col-md-2">
+      <label for="stopBearing">Stop Bearing</label>
+      <input id="stopBearing" class="form-control" type="number" formControlName="stopBearing" min="1" max="360">
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-md-3">
       <button type="submit" class="btn btn-primary btn-block">Search</button>
     </div>
   </div>
 </form>
 <br>
-<div class="table-responsive">
+<div *ngIf="!loading && !hasData">
+  <p>No events match your criteria, please refine your search.</p>
+</div>
+<div *ngIf="!loading && hasData" class="table-responsive">
+  <h3>Event Summary: </h3>
+  <p>Total Events: <span>{{irrigationEvents.totalEvents}}</span></p>
+  <p>Total Events with 0 unknown bearings: <span>{{irrigationEvents.totalEventsWithUnknownBearings}}</span></p>
+  <p>% of Events with unknown bearings: <span>{{irrigationEvents.percentageOfZeroBearings}} %</span></p>
+  <h3>Event Detail:</h3>
   <table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">JournalId</th>
         <th scope="col">Bearing</th>
-        <th scope="col">Pump</th>
         <th scope="col">Direction</th>
-        <th scope="col">Substance</th>
+        <th scope="col">Velocity</th>
+        <th scope="col">Is Pump On?</th>
+        <th scope="col">Schedule Id</th>
+        <th scope="col">Substance Status</th>
+        <th scope="col">Time Between Events (sec)</th>
+        <th scope="col">Event Created On (local time)</th>
+        <th scope="col">Event Created On (utc)</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of irrigationEvents" [class.selected]="item === selectedEvent" (click)="onSelect(item)">
-        <th scope="row">{{item.journalId}}</th>
+      <tr *ngFor="let item of irrigationEvents.events | slice: (currentPage * pageSize) - pageSize : currentPage * pageSize" [class.selected]="item === selectedEvent"
+        (click)="onSelect(item)">
+        <td>{{item.journalId}}</td>
         <td>{{item.bearing}}</td>
-        <td>{{item.pump}}</td>
-        <td>{{item.rotation}}</td>
-        <td>{{item.substance}}</td>
+        <td>{{item.direction}}</td>
+        <td>{{item.velocity}}</td>
+        <td>{{item.isPumpOn}}</td>
+        <td>{{item.scheduleId}}</td>
+        <td>{{item.displaySubstance}}</td>
+        <td>{{item.timeBetweenEvents | amDuration:'seconds' }}</td>
+        <td>{{item.createdDate | amFromUtc | amLocal | amDateFormat:'YYYY-MM-DD HH:mm:ss' }}</td>
+        <td>{{item.createdDate | amFromUtc | amDateFormat:'YYYY-MM-DD HH:mm:ss' }}</td>
       </tr>
     </tbody>
   </table>
+  <ngb-pagination (pageChange)="pageChanged($event)" [collectionSize]="collectionSize" [(page)]="currentPage" [maxSize]="5"
+    [pageSize]="pageSize" [rotate]="true" size="lg" [boundaryLinks]="true"></ngb-pagination>
 </div>

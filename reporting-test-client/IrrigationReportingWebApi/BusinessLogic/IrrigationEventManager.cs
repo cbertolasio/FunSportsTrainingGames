@@ -43,7 +43,7 @@ namespace Trimble.Ag.IrrigationReporting.BusinessLogic
 		public double CalculateZeroBearingEventPercentage(int totalEvents, int zeroBearingEvents)
 		{
 			var result = ((double)zeroBearingEvents / (double)totalEvents) * 100.00;
-			return result;
+			return Math.Round(result, 2);
 		}
 
 		private DC.IrrigationEventRequest GetRequestData(IrrigationEventRequest request)

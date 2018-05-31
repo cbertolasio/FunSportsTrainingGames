@@ -88,10 +88,10 @@ namespace WebApiUnitTests
 
 			TestRequest = new IrrigationEventRequest
 			{
-				StartAt = new TimeData { Hours = 13, Minutes = 30, Seconds = 42 },
+				StartAt = new TimeData { Hour = 13, Minute = 30, Second = 42 },
 				StartBearing = 1,
 				StartDate = DateTime.UtcNow.AddDays(-10),
-				StopAt = new TimeData { Hours = 18, Minutes = 24, Seconds = 42 },
+				StopAt = new TimeData { Hour = 18, Minute = 24, Second = 42 },
 				StopBearing = 360,
 				StopDate = DateTime.UtcNow
 			};

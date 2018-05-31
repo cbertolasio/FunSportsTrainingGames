@@ -5,31 +5,35 @@ import { of } from 'rxjs/observable/of';
 import { IrrigationEvent } from './irrigation-event';
 import { catchError, map, tap } from 'rxjs/operators';
 import { RequestOptions } from '@angular/http';
+import { environment } from '../../../environments/environment';
+import { IrrigationEventResponse } from './irrigation-events-response';
 
 const options = {headers: new HttpHeaders({'Content-Type': 'application/json' })};
 
 @Injectable()
 export class IrrigationCoverageService {
-  findEventsUri = 'api/findEvents';
-  irrigationEventsUri = 'api/irrigationEvents';
+  baseUri = environment.baseUrl;
+  findEventsUri = this.baseUri + 'api/findEvents/';
+  irrigationEventsUri = this.baseUri + 'api/irrigationEvents';
 
-  findEvents(queryData: any): Observable<IrrigationEvent[]> {
-    const data = {};
-
-    return this.http.post<IrrigationEvent[]>(this.findEventsUri, data, options)
+  findEvents(queryData: any): Observable<IrrigationEventResponse> {
+    const pivotId: number = queryData.pivotId;
+    const data = {
+      startDate: queryData.startDate,
+      stopDate: queryData.stopDate,
+      startBearing: queryData.startBearing,
+      stopBearing: queryData.stopBearing,
+      startAt: queryData.startTime,
+      stopAt: queryData.stopTime
+    };
+    const uri = `${this.irrigationEventsUri}/${pivotId}`;
+    return this.http.post<IrrigationEventResponse>(uri, data, options)
       .pipe(
         tap(irrigationEvents => this.log(`fetched irrigation events via post`)),
-        catchError(this.handleError('findEvents', []))
+        catchError(this.handleError('findEvents', new IrrigationEventResponse))
       );
   }
 
-  get(): Observable<IrrigationEvent[]> {
-    return this.http.get<IrrigationEvent[]>(this.irrigationEventsUri)
-      .pipe(
-        tap(irrigationEvents => this.log(`fetched irrigationEvents`)),
-        catchError(this.handleError('getIrrigationEvents', []))
-      );
-  }
   constructor( private http: HttpClient ) { }
 
   private handleError<T> (operation = 'operation', result?: T) {

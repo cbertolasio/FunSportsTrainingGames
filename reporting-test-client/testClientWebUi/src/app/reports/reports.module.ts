@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule, NgbTimepicker } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CoverageRange } from './irrigation-coverage/coverage-range';
+import { MomentModule } from 'ngx-moment';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { CoverageRange } from './irrigation-coverage/coverage-range';
     HttpClientModule,
     environment.production ? [] : HttpClientInMemoryWebApiModule.forRoot(
       InMemoryIrrigationEventsDataService, { dataEncapsulation: false }
-    )
+    ),
+    MomentModule
   ],
   declarations: [
     IrrigationCoverageComponent

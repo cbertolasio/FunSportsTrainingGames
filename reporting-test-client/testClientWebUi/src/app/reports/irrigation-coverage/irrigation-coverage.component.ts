@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { IrrigationEvent } from '../../core/services/irrigation-event';
 import { IrrigationCoverageService } from '../../core/services/irrigation-coverage.service';
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { equal } from 'assert';
 import { equalSegments } from '@angular/router/src/url_tree';
 import { CoverageRange } from './coverage-range';
 import { NGXLogger } from 'ngx-logger';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { IrrigationEventResponse } from '../../core/services/irrigation-events-response';
 
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
   one && two && two.year === one.year && two.month === one.month && two.day === one.day;
@@ -28,36 +29,50 @@ const after = (one: NgbDateStruct, two: NgbDateStruct) =>
 })
 export class IrrigationCoverageComponent implements OnInit {
   inputForm: FormGroup;
-
-  irrigationEvents: IrrigationEvent[];
+  irrigationEvents: IrrigationEventResponse;
   selectedEvent: IrrigationEvent;
   hoveredDate: NgbDateStruct;
+  currentPage: number;
+  collectionSize: number;
+  pageSize: number;
+  startDate: NgbDateStruct;
+  stopDate: NgbDateStruct;
+  loading: boolean;
+  hasData: boolean;
 
   constructor(private coverageService: IrrigationCoverageService, private calendar: NgbCalendar,
-    private logger: NGXLogger, private fb: FormBuilder) {
+    private logger: NGXLogger, private fb: FormBuilder, private ngbDateParser: NgbDateParserFormatter) {
+      this.startDate = calendar.getToday();
+      this.stopDate = calendar.getNext(calendar.getToday(), 'd', 2);
+
       this.createForm();
       this.inputForm.setValue({
         pivotId: 0,
-        startDate: calendar.getToday(),
-        stopDate: calendar.getNext(calendar.getToday(), 'd', 2),
         startTime: { hour: 13, minute: 30 },
-        stopTime: { hour: 13, minute: 30 }
+        stopTime: { hour: 13, minute: 30 },
+        startBearing: 1,
+        stopBearing: 360
       });
 
     this.logger.debug('entered ctor');
+    this.currentPage = 1;
+    this.pageSize = 10;
+    this.loading = false;
+    this.hasData = false;
   }
 
   createForm() {
     this.inputForm = this.fb.group({
       pivotId: ['', Validators.required],
-      startDate: '',
-      stopDate: '',
       startTime: '',
-      stopTime: ''
+      stopTime: '',
+      startBearing: [1, [ Validators.required, Validators.min(0), Validators.max(361)]],
+      stopBearing: [360, [ Validators.required, Validators.min(0), Validators.max(361)]]
     });
   }
 
   ngOnInit() {
+    this.irrigationEvents = new IrrigationEventResponse;
   }
 
   onSelect(irrigationEvent: IrrigationEvent): void {
@@ -66,30 +81,51 @@ export class IrrigationCoverageComponent implements OnInit {
   }
 
   onDateSelection(date: NgbDateStruct) {
-    if (!this.inputForm.value.startDate && !this.inputForm.value.stopDate) {
-      this.inputForm.value.startDate = date;
-    } else if (this.inputForm.value.startDate && !this.inputForm.value.stopDate && after(date, this.inputForm.value.startDate)) {
-      this.inputForm.value.stopDate = date;
+    if (!this.startDate && !this.stopDate) {
+      this.startDate = date;
+    } else if (this.startDate && !this.stopDate && after(date, this.startDate)) {
+      this.stopDate = date;
     } else {
-      this.inputForm.value.stopDate = null;
-      this.inputForm.value.startDate = date;
+      this.stopDate = null;
+      this.startDate = date;
     }
 
-    this.logger.debug('onDateSelection.startDate: ' + JSON.stringify(this.inputForm.value.startDate)
-      + ', stopDate: ' + JSON.stringify(this.inputForm.value.stopDate));
+    this.logger.debug('onDateSelection.startDate: ' + JSON.stringify(this.startDate)
+      + ', stopDate: ' + JSON.stringify(this.stopDate));
   }
 
   onSubmit() {
+    this.loading = true;
     this.logger.debug('onSubmit:' + JSON.stringify(this.inputForm.value));
     const queryData = this.inputForm.value;
+    queryData.startDate = this.ngbDateParser.format(this.startDate);
+    queryData.stopDate = this.ngbDateParser.format(this.stopDate);
+
     this.coverageService.findEvents(queryData)
-      .subscribe(it => this.irrigationEvents = it);
+      .subscribe(it => {
+        this.irrigationEvents = it;
+        this.collectionSize = this.irrigationEvents.events.length;
+
+        this.logger.debug('component.startDate: ' + JSON.stringify(this.startDate)
+        + ', component.stopDate: ' + JSON.stringify(this.stopDate));
+        this.loading = false;
+        this.hasData = (this.collectionSize > 0);
+      }, () => {
+        this.loading = false;
+        this.hasData = false;
+      });
+
+    this.currentPage = 1;
   }
 
-  isHovered = date => this.inputForm.value.startDate && !this.inputForm.value.stopDate && this.hoveredDate
-    && after(date, this.inputForm.value.startDate) && before(date, this.hoveredDate)
+  pageChanged(pageNumber: number) {
+    this.logger.debug('current page ' + pageNumber);
+  }
 
-  isInside = date => after(date, this.inputForm.value.startDate) && before(date, this.inputForm.value.stopDate);
-  isFrom = date => equals(date, this.inputForm.value.startDate);
-  isTo = date => equals(date, this.inputForm.value.stopDate);
+  isHovered = date => this.startDate && !this.stopDate && this.hoveredDate
+    && after(date, this.startDate) && before(date, this.hoveredDate)
+
+  isInside = date => after(date, this.startDate) && before(date, this.stopDate);
+  isFrom = date => equals(date, this.startDate);
+  isTo = date => equals(date, this.stopDate);
 }
