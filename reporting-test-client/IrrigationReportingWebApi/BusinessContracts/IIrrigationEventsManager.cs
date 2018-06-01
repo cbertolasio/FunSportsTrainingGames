@@ -8,5 +8,6 @@ namespace Trimble.Ag.IrrigationReporting.BusinessContracts
 		double CalculateZeroBearingEventPercentage(int totalEvents, int zeroBearingEvents);
 		int CountOfEventsWithZeroBearing(IrrigationEventRequest requestData);
 		IEnumerable<IrrigationEvent> GetEvents(IrrigationEventRequest requestData);
+		IEnumerable<IrrigationEventSummary> GetEventSummary(IEnumerable<IrrigationEvent> irrigationEvents);
 	}
 }

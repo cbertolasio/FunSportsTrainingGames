@@ -15,6 +15,28 @@ namespace BusinessLogicTests
     public class IrrigationEventsManagerTests
     {
 		[Test]
+		public void GetEventSummary_Returns_Expected_Result()
+		{
+			var events = TestEvents();
+			
+			var expected = 2;  // hard coded grouping
+
+			var actual = manager.GetEventSummary(events).Count();
+			
+			Assert.AreEqual(expected, actual);
+		}
+
+		public static IEnumerable<IrrigationEvent> TestEvents() {
+			return new Collection<IrrigationEvent>
+			{
+				new IrrigationEvent { Direction = "forward", IsPumpOn = true, DisplaySubstance = "Water" },
+				new IrrigationEvent { Direction = "forward", IsPumpOn = true, DisplaySubstance = "Water" },
+				new IrrigationEvent { Direction = "reverse", IsPumpOn = true, DisplaySubstance = "Effluent" },
+				new IrrigationEvent { Direction = "reverse", IsPumpOn = true, DisplaySubstance = "Effluent" },
+			};
+		}
+
+		[Test]
 		public void GetEvents_Returns_Expected_Result()
         {
 			var expected = TestResult.Count();

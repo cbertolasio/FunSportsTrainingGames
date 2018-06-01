@@ -41,8 +41,27 @@ namespace Trimble.Ag.IrrigationReporting.WebApi.Controllers
 				PercentageOfZeroBearings = percentageOfZeroBearings
 			};
 
+			var eventSummary = eventManager.GetEventSummary(events);
+			var responseSummary = new Collection<IrrigationEventSummary>();
+			foreach (var item in eventSummary)
+			{
+				responseSummary.Add(GetResponseSummary(item));
+			}
+			response.Summary = responseSummary;
+
 			var ouput = StatusCode((int)HttpStatusCode.OK, response);
 			return ouput;
+		}
+
+		private IrrigationEventSummary GetResponseSummary(BC.IrrigationEventSummary item)
+		{
+			return new IrrigationEventSummary
+			{
+				Count = item.Count,
+				Direction = item.Direction,
+				DisplaySubstance = item.DisplaySubstance,
+				IsPumpOn = item.IsPumpOn
+			};
 		}
 
 		private BC.IrrigationEventRequest GetRequestData(IrrigationEventRequest request, int pivotId)

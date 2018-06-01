@@ -1,7 +1,12 @@
 export class IrrigationEvent {
     journalId: number;
     bearing: number;
-    pump = false;
-    rotation: string;
-    substance: string;
+    direction: string;
+    velocity: number;
+    isPumpOn: false;
+    scheduleId: number;
+    puvitControllerId: number;
+    createdDate: Date;
+    displaySubstance: string;
+    timeBetweenEvents: number;
 }

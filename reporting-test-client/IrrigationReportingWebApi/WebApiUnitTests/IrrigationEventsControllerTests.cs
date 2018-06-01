@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using Autofac.Extras.Moq;
@@ -15,6 +16,18 @@ namespace WebApiUnitTests
 	[TestFixture]
 	public class IrrigationEventsControllerTests
 	{
+		[Test]
+		public void Post_Returns_Summary()
+		{
+			mockEvents.Setup(it => it.GetEventSummary(It.IsAny<IEnumerable<BC.IrrigationEvent>>())).Returns(TestSummary);
+
+			var result = (IrrigationEventsResponse)((ObjectResult)controller.Post(TestId, TestRequest)).Value;
+
+			var actual = result.Summary;
+
+			Assert.IsNotNull(actual);
+		}
+
 		[Test]
 		public void Post_Returns_Count()
 		{
@@ -96,6 +109,12 @@ namespace WebApiUnitTests
 				StopDate = DateTime.UtcNow
 			};
 
+			TestSummary = new Collection<BC.IrrigationEventSummary>
+			{
+				new BC.IrrigationEventSummary { Count = 100, Direction = "forward", DisplaySubstance = "Water", IsPumpOn = true },
+				new BC.IrrigationEventSummary { Count = 200, Direction = "reverse", DisplaySubstance = "Effluent", IsPumpOn = true }
+			};
+
 			mockEvents.Setup(it => it.GetEvents(It.IsAny<BC.IrrigationEventRequest>())).Returns(() => new List<BC.IrrigationEvent>
 			{
 				new BC.IrrigationEvent { JournalId = 1, Bearing = 360, Direction = "Reverse", DisplaySubstance = "foo" },
@@ -112,5 +131,6 @@ namespace WebApiUnitTests
 		private Mock<BC.IIrrigationEventsManager> mockEvents;
 		private int TestEventsWithZeroBearing = 10;
 		private double TestPercentage = 1.00;
+		private IEnumerable<BC.IrrigationEventSummary> TestSummary;
 	}
 }

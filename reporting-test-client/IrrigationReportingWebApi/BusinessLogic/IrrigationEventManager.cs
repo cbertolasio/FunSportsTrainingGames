@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Trimble.Ag.IrrigationReporting.BusinessContracts;
 using DC = Trimble.Ag.IrrigationReporting.DataContracts;
 
@@ -167,6 +168,21 @@ namespace Trimble.Ag.IrrigationReporting.BusinessLogic
 				Minutes = request.StopAt.Minutes,
 				Seconds = request.StopAt.Seconds
 			};
+		}
+
+		public IEnumerable<IrrigationEventSummary> GetEventSummary(IEnumerable<IrrigationEvent> events)
+		{
+			var summary = from e in events
+						 group e by new { e.DisplaySubstance, e.Direction, e.IsPumpOn } into g
+						 select new IrrigationEventSummary
+						 {
+							 Count = g.Count(),
+							 DisplaySubstance = g.Key.DisplaySubstance,
+							 Direction = g.Key.Direction,
+							 IsPumpOn = g.Key.IsPumpOn ?? false
+						 };
+
+			return summary;
 		}
 
 		public IrrigationEventsManager(DC.IIrrigationEventData eventData)

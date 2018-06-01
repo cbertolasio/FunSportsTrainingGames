@@ -62,9 +62,27 @@
 </div>
 <div *ngIf="!loading && hasData" class="table-responsive">
   <h3>Event Summary: </h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Count</th>
+        <th scope="col">Substance Status</th>
+        <th scope="col">Direction</th>
+        <th scope="col">Is Pump On</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of irrigationEvents.summary" [class.selected]="item === selectedSummaryItem" (click)="onSelecteSummaryItem(item)">
+        <td>{{item.count}}</td>
+        <td>{{item.displaySubstance}}</td>
+        <td>{{item.direction}}</td>
+        <td>{{item.isPumpOn}}</td>
+      </tr>
+    </tbody>
+  </table>
   <p>Total Events: <span>{{irrigationEvents.totalEvents}}</span></p>
-  <p>Total Events with 0 unknown bearings: <span>{{irrigationEvents.totalEventsWithUnknownBearings}}</span></p>
-  <p>% of Events with unknown bearings: <span>{{irrigationEvents.percentageOfZeroBearings}} %</span></p>
+  <p>Total Events with 0 degree bearings: <span>{{irrigationEvents.totalEventsWithUnknownBearings}}</span></p>
+  <p>% of Events with 0 degree bearings: <span>{{irrigationEvents.percentageOfZeroBearings}} %</span></p>
   <h3>Event Detail:</h3>
   <table class="table table-striped">
     <thead>

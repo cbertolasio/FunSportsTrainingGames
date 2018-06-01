@@ -9,6 +9,7 @@ import { CoverageRange } from './coverage-range';
 import { NGXLogger } from 'ngx-logger';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IrrigationEventResponse } from '../../core/services/irrigation-events-response';
+import { IrrigationEventSummary } from '../../core/services/irrigation-event-summary';
 
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
   one && two && two.year === one.year && two.month === one.month && two.day === one.day;
@@ -31,6 +32,7 @@ export class IrrigationCoverageComponent implements OnInit {
   inputForm: FormGroup;
   irrigationEvents: IrrigationEventResponse;
   selectedEvent: IrrigationEvent;
+  selectedSummaryItem: IrrigationEventSummary;
   hoveredDate: NgbDateStruct;
   currentPage: number;
   collectionSize: number;
@@ -78,6 +80,11 @@ export class IrrigationCoverageComponent implements OnInit {
   onSelect(irrigationEvent: IrrigationEvent): void {
     this.selectedEvent = irrigationEvent;
     this.logger.debug('item selected: ' + JSON.stringify(irrigationEvent));
+  }
+
+  onSelecteSummaryItem(summaryItem: IrrigationEventSummary): void {
+    this.selectedSummaryItem = summaryItem;
+    this.logger.debug('summary item selected: ' + JSON.stringify(summaryItem));
   }
 
   onDateSelection(date: NgbDateStruct) {
