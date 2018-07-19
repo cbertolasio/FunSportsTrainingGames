@@ -38,7 +38,7 @@ namespace Trimble.Ag.IrrigationReporting.DataAccess
 			builder.Append($"and ie.bearing >= {startBearingMinutes} and ie.bearing <= {stopBearingMinutes} ");
 			builder.Append("and ie.pivotcontrollerid in (select distinct h.controllerid ");
 			builder.Append("from irrigation.control_and_bearing_controller_history as h ");
-			builder.Append($"where h.pivotid = {pivotId});");
+			builder.Append($"where h.pivotid = {pivotId}) order by ie.createdon;");
 
 			var cmd = repositoryBase.Context.CreateCommand();
 			cmd.CommandText = builder.ToString();
@@ -103,7 +103,7 @@ namespace Trimble.Ag.IrrigationReporting.DataAccess
 			return repositoryBase.ExecuteScalar(cmd);
 		}
 
-		private double GetBearingInDegrees(int? bearing)
+		private decimal GetBearingInDegrees(int? bearing)
 		{
 			return bearingMinuiteConverter.ToDegrees(bearing);
 		}

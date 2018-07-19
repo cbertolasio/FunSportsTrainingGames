@@ -8,7 +8,7 @@ namespace Trimble.Ag.IrrigationReporting.DataModels
 	{
 		public string GetConnectionString()
 		{
-			ConnectionName = "odbc-agdatawarehouse";
+			ConnectionName = "odbcagdatawarehouse";
 			return configuration.GetConnectionString(ConnectionName);
 		}
 

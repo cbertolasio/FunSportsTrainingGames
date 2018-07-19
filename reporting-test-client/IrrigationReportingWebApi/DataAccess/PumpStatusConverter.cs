@@ -8,10 +8,22 @@ namespace Trimble.Ag.IrrigationReporting.DataAccess
 	{
 		public bool GetPumpStatus(string pumpValue)
 		{
-			bool result;
-			bool.TryParse(pumpValue, out result);
+			if (pumpValue == null)
+			{
+				return false;
+			}
 
-			return result;
+			var value = pumpValue.Trim().ToUpper();
+			switch (value)
+			{
+				case "YES":
+				case "Y":
+				case "1":
+				case "TRUE":
+					return true;
+				default:
+					return false;
+			}
 		}
 	}
 }

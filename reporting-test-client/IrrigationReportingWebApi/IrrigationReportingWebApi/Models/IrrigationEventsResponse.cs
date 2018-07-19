@@ -12,6 +12,7 @@ namespace Trimble.Ag.IrrigationReporting.IrrigationReportingWebApi.Models
 		public int TotalEvents { get; set; }
 		public int TotalEventsWithUnknownBearings { get; set; }
 		public double PercentageOfZeroBearings { get; set; }
+		public IEnumerable<IrrigationEventBoundary> Boundaries { get; set; }
 
 		public IrrigationEventsResponse()
 		{

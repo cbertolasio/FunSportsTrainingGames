@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using BC = Trimble.Ag.IrrigationReporting.BusinessContracts;
-using Trimble.Ag.IrrigationReporting.IrrigationReportingWebApi.Models;
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Configuration;
+using Trimble.Ag.IrrigationReporting.IrrigationReportingWebApi.Models;
+using BC = Trimble.Ag.IrrigationReporting.BusinessContracts;
 
 namespace Trimble.Ag.IrrigationReporting.WebApi.Controllers
 {
@@ -49,8 +48,35 @@ namespace Trimble.Ag.IrrigationReporting.WebApi.Controllers
 			}
 			response.Summary = responseSummary;
 
+			var eventBoundaries = boundaryManager.GetEventBoundaries(events);
+			var responseBoundaries = new Collection<IrrigationEventBoundary>();
+
+			foreach (var item in eventBoundaries)
+			{
+				responseBoundaries.Add(GetResponseBoundary(item));
+			}
+			response.Boundaries = responseBoundaries;
+
 			var ouput = StatusCode((int)HttpStatusCode.OK, response);
 			return ouput;
+		}
+
+		private IrrigationEventBoundary GetResponseBoundary(BC.IrrigationEventBoundary item)
+		{
+			return new IrrigationEventBoundary
+			{
+				DegreesOfTravel = item.DegreesOfTravel,
+				Direction = item.Direction,
+				ElapsedTime = item.ElapsedTime,
+				PivotControllerId = item.PivotControllerId,
+				ScheduleId = item.ScheduleId,
+				StartBearing = item.StartBearing,
+				StartJournalId = item.StartJournalId,
+				StopBearing = item.StopBearing,
+				StopJournalId = item.StopJournalId,
+				Substance = item.Substance,
+				Velocity = item.Velocity
+			};
 		}
 
 		private IrrigationEventSummary GetResponseSummary(BC.IrrigationEventSummary item)
@@ -80,7 +106,8 @@ namespace Trimble.Ag.IrrigationReporting.WebApi.Controllers
 
 		private static IrrigationEvent GetNewEvent(BC.IrrigationEvent irrigationEvent)
 		{
-			return new IrrigationEvent {
+			return new IrrigationEvent
+			{
 				Bearing = irrigationEvent.Bearing,
 				CreatedDate = irrigationEvent.CreatedDate,
 				Direction = irrigationEvent.Direction,
@@ -114,11 +141,13 @@ namespace Trimble.Ag.IrrigationReporting.WebApi.Controllers
 			};
 		}
 
-		public IrrigationEventsController(BC.IIrrigationEventsManager eventManager, IConfiguration config)
+		public IrrigationEventsController(BC.IIrrigationEventsManager eventManager, IConfiguration config, BC.IEventBoundaryManager boundaryManager)
 		{
+			this.boundaryManager = boundaryManager;
 			this.eventManager = eventManager;
 		}
 
 		private readonly BC.IIrrigationEventsManager eventManager;
+		private readonly BC.IEventBoundaryManager boundaryManager;
 	}
 }

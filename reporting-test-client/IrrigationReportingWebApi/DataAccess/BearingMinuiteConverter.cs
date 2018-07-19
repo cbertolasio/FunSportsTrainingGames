@@ -8,9 +8,9 @@ namespace Trimble.Ag.IrrigationReporting.DataAccess
 	{
 		double degreesPerMinute = 60.0;
 
-		public double ToDegrees(int? bearingMinutes)
+		public decimal ToDegrees(int? bearingMinutes)
 		{
-			return bearingMinutes.HasValue == false ? 0 : Math.Round((bearingMinutes.Value / degreesPerMinute), 2);
+			return bearingMinutes.HasValue == false ? 0.0m : Convert.ToDecimal(Math.Round((bearingMinutes.Value / degreesPerMinute), 6));
 		}
 
 		public int ToBearingMinutes(double bearing)

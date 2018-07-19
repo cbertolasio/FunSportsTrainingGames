@@ -60,7 +60,7 @@ namespace IrrigationReportingWebApi
 				};
 			});
 
-			var connectionString = Configuration.GetConnectionString("odbc-agdatawarehouse");
+			//var connectionString = Configuration.GetConnectionString("odbc-agdatawarehouse");
 			
 			//services.AddEntityFrameworkNpgsql().AddDbContext<AgDataWarehouseDbContext>(options => 
 			//	options.UseNpgsql(connectionString)
@@ -85,7 +85,7 @@ namespace IrrigationReportingWebApi
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 			app.UseMvc();
 			app.UseForwardedHeaders();
 			applicationLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());

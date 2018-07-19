@@ -11,9 +11,32 @@ using DC = Trimble.Ag.IrrigationReporting.DataContracts;
 
 namespace BusinessLogicTests
 {
+
 	[TestFixture]
     public class IrrigationEventsManagerTests
     {
+		[Test]
+		public void GetChangePpoints_Returns_ExpectedCount()
+		{
+			var testBoundaries = TestEventBoundaries();
+			var expected = testBoundaries.Count();
+
+			changePointManager.Setup(it => it.GetEventBoundaries(It.IsAny<IEnumerable<IrrigationEvent>>())).Returns(() => testBoundaries);
+			
+			var actual = manager.GetEventBoundaries(TestEvents()).Count();
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void GetChangePoints_DelegatesTo_ChangePointManager()
+		{
+			manager.GetEventBoundaries(TestEvents());
+
+			changePointManager.Verify(it => it.GetEventBoundaries(It.IsAny<IEnumerable<IrrigationEvent>>()));
+		}
+
+
 		[Test]
 		public void GetEventSummary_Returns_Expected_Result()
 		{
@@ -34,6 +57,11 @@ namespace BusinessLogicTests
 				new IrrigationEvent { Direction = "reverse", IsPumpOn = true, DisplaySubstance = "Effluent" },
 				new IrrigationEvent { Direction = "reverse", IsPumpOn = true, DisplaySubstance = "Effluent" },
 			};
+		}
+
+		public static IEnumerable<IrrigationEventBoundary> TestEventBoundaries()
+		{
+			return new Collection<IrrigationEventBoundary> { new IrrigationEventBoundary { DegreesOfTravel = 45, StartBearing = 10, StopBearing = 55 } };
 		}
 
 		[Test]
@@ -102,6 +130,7 @@ namespace BusinessLogicTests
 			var mockery = AutoMock.GetLoose();
 
 			dataSource = mockery.Mock<DC.IIrrigationEventData>();
+			changePointManager = mockery.Mock<IEventBoundaryManager>();
 			manager = mockery.Create<IrrigationEventsManager>();
 
 			TestRequest = new IrrigationEventRequest
@@ -128,5 +157,6 @@ namespace BusinessLogicTests
 		private IrrigationEventRequest TestRequest;
 		private IEnumerable<DC.IrrigationEvent> TestResult;
 		private Mock<DC.IIrrigationEventData> dataSource;
+		private Mock<IEventBoundaryManager> changePointManager;
 	}
 }

@@ -59,12 +59,9 @@ describe('IrrigationCoverageComponent', () => {
   });
 
   it ('.onInit does not load data', () => {
-    spyOn(coverageService, 'get').and.returnValue(of(testEvents));
-
     component.ngOnInit();
 
     expect(component.irrigationEvents).toBeUndefined('undefined');
-    expect(coverageService.get).not.toHaveBeenCalled();
   });
 
   it ('.onSubmit() should call coverageService.findEvents()', () => {
@@ -80,7 +77,7 @@ describe('IrrigationCoverageComponent', () => {
 
     component.onSubmit();
 
-    expect(component.irrigationEvents.length).toEqual(testEvents.length);
-    expect(component.irrigationEvents[0].journalId).toEqual(testEvents[0].journalId);
+    expect(component.irrigationEvents.events.length).toEqual(testEvents.length);
+    expect(component.irrigationEvents.events[0].journalId).toEqual(testEvents[0].journalId);
   });
 });

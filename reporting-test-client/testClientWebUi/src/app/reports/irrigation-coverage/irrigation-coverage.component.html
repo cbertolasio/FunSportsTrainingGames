@@ -83,6 +83,42 @@
   <p>Total Events: <span>{{irrigationEvents.totalEvents}}</span></p>
   <p>Total Events with 0 degree bearings: <span>{{irrigationEvents.totalEventsWithUnknownBearings}}</span></p>
   <p>% of Events with 0 degree bearings: <span>{{irrigationEvents.percentageOfZeroBearings}} %</span></p>
+  <h3>Event Boundaries:</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Substance</th>
+        <th scope="col">Velocity</th>
+        <th scope="col">Degrees of Travel</th>
+        <th scope="col">Direction</th>
+        <th scope="col">Start Bearing</th>
+        <th scope="col">Stop Bearing</th>
+        <th scope="col">Elapsed Time</th>
+        <th scope="col">Schedule Id</th>
+        <th scope="col">Controller Id</th>
+        <th scope="col">Start Journal Id</th>
+        <th scope="col">Stop Journal Id</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of irrigationEvents.boundaries | slice: (currentBoundaryPage * boundaryPageSize) - boundaryPageSize : currentBoundaryPage * boundaryPageSize">
+          <td>{{item.substance}}</td>
+          <td>{{item.velocity}}</td>
+          <td>{{item.degreesOfTravel}}</td>
+          <td>{{item.direction}}</td>
+          <td>{{item.startBearing}}</td>
+          <td>{{item.stopBearing}}</td>
+          <td>{{item.elapsedTime}}</td>
+          <td>{{item.scheduleId}}</td>
+          <td>{{item.pivotControllerId}}</td>
+          <td>{{item.startJournalId}}</td>
+          <td>{{item.stopJournalId}}</td>
+        </tr>
+      </tbody>
+  </table>
+  <ngb-pagination (pageChange)="boundaryPageChanged($event)" [collectionSize]="boundaryCollectionSize" [(page)]="currentBoundaryPage" [maxSize]="5"
+    [pageSize]="boundaryPageSize" [rotate]="true" size="lg" [boundaryLinks]="true"></ngb-pagination>
+
   <h3>Event Detail:</h3>
   <table class="table table-striped">
     <thead>
@@ -118,3 +154,7 @@
   <ngb-pagination (pageChange)="pageChanged($event)" [collectionSize]="collectionSize" [(page)]="currentPage" [maxSize]="5"
     [pageSize]="pageSize" [rotate]="true" size="lg" [boundaryLinks]="true"></ngb-pagination>
 </div>
+
+<!-- <div id="chart":>
+
+</div> -->

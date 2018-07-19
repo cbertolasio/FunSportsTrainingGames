@@ -2,7 +2,7 @@
 {
 	public interface IBearingMinuiteConverter
 	{
-		double ToDegrees(int? bearingMinutes);
+		decimal ToDegrees(int? bearingMinutes);
 		int ToBearingMinutes(double bearing);
 	}
 }

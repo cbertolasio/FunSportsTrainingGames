@@ -71,6 +71,19 @@ namespace WebApiUnitTests
 		}
 
 		[Test]
+		public void Post_Returns_Boundaries()
+		{
+			var testBoundaries = new List<BC.IrrigationEventBoundary> { new BC.IrrigationEventBoundary { }, new BC.IrrigationEventBoundary { }, new BC.IrrigationEventBoundary { } };
+			mockBoundaries.Setup(it => it.GetEventBoundaries(It.IsAny<IEnumerable<BC.IrrigationEvent>>())).Returns(testBoundaries);
+
+			var expected = new List<IrrigationEventBoundary> { new IrrigationEventBoundary { }, new IrrigationEventBoundary { }, new IrrigationEventBoundary { } };
+
+			var actual = (IrrigationEventsResponse)((ObjectResult)controller.Post(TestId, TestRequest)).Value;
+
+			Assert.AreEqual(expected.Count(), actual.Boundaries.Count());
+		}
+
+		[Test]
 		public void Post_Gets_Expected_ZeroBearingPercentage()
 		{
 			var expected = TestPercentage;
@@ -97,6 +110,8 @@ namespace WebApiUnitTests
 		{
 			var mockery = AutoMock.GetLoose();
 			mockEvents = mockery.Mock<BC.IIrrigationEventsManager>();
+			mockBoundaries = mockery.Mock<BC.IEventBoundaryManager>();
+
 			controller = mockery.Create<IrrigationEventsController>();
 
 			TestRequest = new IrrigationEventRequest
@@ -118,7 +133,7 @@ namespace WebApiUnitTests
 			mockEvents.Setup(it => it.GetEvents(It.IsAny<BC.IrrigationEventRequest>())).Returns(() => new List<BC.IrrigationEvent>
 			{
 				new BC.IrrigationEvent { JournalId = 1, Bearing = 360, Direction = "Reverse", DisplaySubstance = "foo" },
-				new BC.IrrigationEvent { JournalId = 2, Bearing = 359.5, Direction = "Reverse" }
+				new BC.IrrigationEvent { JournalId = 2, Bearing = 359.5m, Direction = "Reverse" }
 			});
 
 			mockEvents.Setup(it => it.CountOfEventsWithZeroBearing(It.IsAny<BC.IrrigationEventRequest>())).Returns(TestEventsWithZeroBearing);
@@ -132,5 +147,6 @@ namespace WebApiUnitTests
 		private int TestEventsWithZeroBearing = 10;
 		private double TestPercentage = 1.00;
 		private IEnumerable<BC.IrrigationEventSummary> TestSummary;
+		private Mock<BC.IEventBoundaryManager> mockBoundaries;
 	}
 }

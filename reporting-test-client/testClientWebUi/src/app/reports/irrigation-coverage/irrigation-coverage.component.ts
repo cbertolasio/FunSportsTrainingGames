@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { IrrigationEvent } from '../../core/services/irrigation-event';
 import { IrrigationCoverageService } from '../../core/services/irrigation-coverage.service';
 import { NgbDateStruct, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
@@ -10,6 +10,7 @@ import { NGXLogger } from 'ngx-logger';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IrrigationEventResponse } from '../../core/services/irrigation-events-response';
 import { IrrigationEventSummary } from '../../core/services/irrigation-event-summary';
+// import * as c3 from 'c3';
 
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
   one && two && two.year === one.year && two.month === one.month && two.day === one.day;
@@ -28,15 +29,18 @@ const after = (one: NgbDateStruct, two: NgbDateStruct) =>
   styleUrls: ['./irrigation-coverage.component.scss'],
   providers: [NGXLogger]
 })
-export class IrrigationCoverageComponent implements OnInit {
+export class IrrigationCoverageComponent implements OnInit { // , AfterViewInit {
   inputForm: FormGroup;
   irrigationEvents: IrrigationEventResponse;
   selectedEvent: IrrigationEvent;
   selectedSummaryItem: IrrigationEventSummary;
   hoveredDate: NgbDateStruct;
   currentPage: number;
+  currentBoundaryPage: number;
   collectionSize: number;
+  boundaryCollectionSize: number;
   pageSize: number;
+  boundaryPageSize: number;
   startDate: NgbDateStruct;
   stopDate: NgbDateStruct;
   loading: boolean;
@@ -59,6 +63,8 @@ export class IrrigationCoverageComponent implements OnInit {
     this.logger.debug('entered ctor');
     this.currentPage = 1;
     this.pageSize = 10;
+    this.currentBoundaryPage = 1;
+    this.boundaryPageSize = 10;
     this.loading = false;
     this.hasData = false;
   }
@@ -76,6 +82,18 @@ export class IrrigationCoverageComponent implements OnInit {
   ngOnInit() {
     this.irrigationEvents = new IrrigationEventResponse;
   }
+
+  // ngAfterViewInit() {
+  //   c3.generate({
+  //     bindto: '#chart',
+  //     data: {
+  //       columns: [
+  //         ['data1', 30, 200, 100, 400, 150, 250],
+  //         ['data2', 50, 20, 10, 40, 15, 25]
+  //       ]
+  //     }
+  //   });
+  // }
 
   onSelect(irrigationEvent: IrrigationEvent): void {
     this.selectedEvent = irrigationEvent;
@@ -112,6 +130,12 @@ export class IrrigationCoverageComponent implements OnInit {
       .subscribe(it => {
         this.irrigationEvents = it;
         this.collectionSize = this.irrigationEvents.events.length;
+        this.boundaryCollectionSize = this.irrigationEvents.boundaries.length;
+
+        if (this.irrigationEvents !== undefined && this.irrigationEvents.events !== undefined && this.irrigationEvents.events.length > 0) {
+          this.logger.debug('journalId: ' + this.irrigationEvents.events[0].journalId);
+          this.logger.debug('summary.count: ' + this.irrigationEvents.summary[0].count);
+        }
 
         this.logger.debug('component.startDate: ' + JSON.stringify(this.startDate)
         + ', component.stopDate: ' + JSON.stringify(this.stopDate));
@@ -123,10 +147,15 @@ export class IrrigationCoverageComponent implements OnInit {
       });
 
     this.currentPage = 1;
+    this.currentBoundaryPage = 1;
   }
 
   pageChanged(pageNumber: number) {
     this.logger.debug('current page ' + pageNumber);
+  }
+
+  boundaryPageChanged(pageNumber: number) {
+    this.logger.debug('current boundary page ' + pageNumber);
   }
 
   isHovered = date => this.startDate && !this.stopDate && this.hoveredDate

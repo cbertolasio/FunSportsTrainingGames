@@ -55,6 +55,7 @@ namespace Trimble.Ag.IrrigationReporting.DependencyInjection
 
 			builder.RegisterType<PumpStatusConverter>().As<IPumpStatusConverter>().InstancePerLifetimeScope();
 			builder.RegisterType<BearingMinuiteConverter>().As<IBearingMinuiteConverter>().InstancePerLifetimeScope();
+			builder.RegisterType<EventBoundaryManager>().As<IEventBoundaryManager>().InstancePerLifetimeScope();
 
 			builder.Populate(services);
 			return builder.Build();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Trimble.Ag.IrrigationReporting.IrrigationReportingWebApi.Models
@@ -7,7 +6,7 @@ namespace Trimble.Ag.IrrigationReporting.IrrigationReportingWebApi.Models
 	public class IrrigationEvent
 	{
 		public long JournalId { get; set; }
-		public double Bearing { get; set; }
+		public decimal Bearing { get; set; }
 		public string Direction { get; set; }
 		public double Velocity { get; set; }
 		public bool? IsPumpOn { get; set; }

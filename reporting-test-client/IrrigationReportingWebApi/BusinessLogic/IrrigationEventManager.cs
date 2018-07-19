@@ -68,7 +68,7 @@ namespace Trimble.Ag.IrrigationReporting.BusinessLogic
 				Bearing = irrigationEvent.Bearing,
 				CreatedDate = irrigationEvent.CreatedDate,
 				Direction = GetDirection(irrigationEvent.RotationId ?? 0),
-				IsPumpOn = irrigationEvent.Pump,
+				IsPumpOn = irrigationEvent.Pump ?? false,
 				JournalId = irrigationEvent.JournalId,
 				PivotControllerId = irrigationEvent.PivotControllerId,
 				ScheduleId = irrigationEvent.ScheduleId ?? 0,
@@ -134,16 +134,16 @@ namespace Trimble.Ag.IrrigationReporting.BusinessLogic
 
 			switch (rotationId)
 			{
-				case 0:
+				case 1:
 					direction = DirectionNone;
 					break;
-				case 1:
+				case 2:
 					direction = DirectionForward;
 					break;
-				case 2:
+				case 3:
 					direction = DirectionReverse;
 					break;
-				case 3:
+				case 0:
 				default:
 					return direction;
 			}
@@ -179,14 +179,19 @@ namespace Trimble.Ag.IrrigationReporting.BusinessLogic
 							 Count = g.Count(),
 							 DisplaySubstance = g.Key.DisplaySubstance,
 							 Direction = g.Key.Direction,
-							 IsPumpOn = g.Key.IsPumpOn ?? false
+							 IsPumpOn = g.Key.IsPumpOn
 						 };
 
 			return summary;
 		}
-
-		public IrrigationEventsManager(DC.IIrrigationEventData eventData)
+		public IEnumerable<IrrigationEventBoundary> GetEventBoundaries(IEnumerable<IrrigationEvent> testEvents)
 		{
+			return changePointManager.GetEventBoundaries(testEvents);
+		}
+
+		public IrrigationEventsManager(DC.IIrrigationEventData eventData, IEventBoundaryManager changePointManager)
+		{
+			this.changePointManager = changePointManager;
 			this.eventData = eventData;
 		}
 
@@ -220,5 +225,6 @@ namespace Trimble.Ag.IrrigationReporting.BusinessLogic
 		public const string DirectionNone = "None";
 		public const string DirectionForward = "Forward";
 		public const string DirectionReverse = "Reverse";
+		private readonly IEventBoundaryManager changePointManager;
 	}
 }

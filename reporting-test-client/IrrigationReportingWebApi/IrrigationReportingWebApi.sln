@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiUnitTests", "WebApiUn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicTests", "BusinessLogicTests\BusinessLogicTests.csproj", "{02F33EAF-3FB6-4558-B666-727FC0449372}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessUnitTests", "DataAccessUnitTests\DataAccessUnitTests.csproj", "{32C8EF33-2322-43D8-BA6C-03BCB6E17C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessUnitTests", "DataAccessUnitTests\DataAccessUnitTests.csproj", "{32C8EF33-2322-43D8-BA6C-03BCB6E17C1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6AC5D5D6-9724-425A-829E-EDA7C7D9AD16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
