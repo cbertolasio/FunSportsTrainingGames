@@ -25,3 +25,16 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+# Usage
+This section outlines some of the samples that we have created...
+
+## Input Bindings, Child Component as a Table Row
+To see a sample of a master detail component that 
+uses input bindings, navigate to /farms and review the 
+table that is created.  The parent component contains an 
+array of farms and for each farm in the array, the parent 
+component creates a child component that is a table row.
+Also notice that the child component uses an attribute selector
+so that it can be included in a tr element.
+
