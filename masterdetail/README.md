@@ -38,3 +38,5 @@ component creates a child component that is a table row.
 Also notice that the child component uses an attribute selector
 so that it can be included in a tr element.
 
+These components can be found in (/app/farms)
+
