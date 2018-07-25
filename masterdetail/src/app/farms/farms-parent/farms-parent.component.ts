@@ -10,6 +10,12 @@ export class FarmsParentComponent implements OnInit {
 
   farms = FARMS;
 
+  onDeleted(data: Farm) {
+    console.log('deleting farm: ' + data.name);
+    const index = this.farms.indexOf(data);
+    this.farms.splice(index, 1);
+  }
+
   constructor() { }
 
   ngOnInit() {

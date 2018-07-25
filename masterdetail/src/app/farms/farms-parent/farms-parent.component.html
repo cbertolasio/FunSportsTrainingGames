@@ -19,6 +19,6 @@
   </tr>
   </thead>
   <tbody>
-      <tr app-farms-child *ngFor="let farm of farms" [rowData]="farm"></tr>
+      <tr app-farms-child *ngFor="let farm of farms" [rowData]="farm" (farmDeletedEvent)="onDeleted($event)"></tr>
   </tbody>
 </table>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Farm } from '../farm';
 
 @Component({
@@ -9,6 +9,13 @@ import { Farm } from '../farm';
 export class FarmsChildComponent implements OnInit {
   // @Input() farms: Farm[];
   @Input() rowData: Farm;
+  @Output() farmDeletedEvent: EventEmitter<Farm> =  new EventEmitter<Farm>();
+
+  deleteFarm(data: Farm) {
+    console.log('emitting event to delete a farm ' + data.name);
+
+    this.farmDeletedEvent.emit(data);
+  }
 
   constructor() { }
 

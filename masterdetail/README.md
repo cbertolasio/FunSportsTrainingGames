@@ -40,3 +40,13 @@ so that it can be included in a tr element.
 
 These components can be found in [/src/app/farms](src/app/farms/.)
 
+## Parent listens for child event
+We have also demonstrated in the farms master detail page that the parent 
+componet subscribes to an event that is emitted from each item in the 
+child component.  Basically, when the user clicks delete for a given farm,
+the child component will emit an event so that the parent component can 
+subscribe and delete the item from the table.
+
+This sample is related to the [angular sample](https://angular.io/guide/component-interaction#parent-listens-for-child-event)
+
+These components can be found in [/src/app/farms](src/app/farms/.)
