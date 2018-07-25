@@ -1,0 +1,24 @@
+<p>
+  The table below shows a list of farm details. 
+  The parent component pushes data into the child component.
+</p>
+<p>
+    The child component has an attribute selector so that when each 
+    child is injected as a table row, it does not break the table
+</p>
+<p>
+  This sample illustrates <a href="https://angular.io/guide/component-interaction#pass-data-from-parent-to-child-with-input-binding" target="_blank">input binding</a>
+</p>
+
+<table>
+  <thead>
+    <tr>
+    <th>Name:</th>
+    <th>State:</th>
+    <th>Location:</th>
+  </tr>
+  </thead>
+  <tbody>
+      <tr app-farms-child *ngFor="let farm of farms" [rowData]="farm"></tr>
+  </tbody>
+</table>
